@@ -1,0 +1,24 @@
+<script type="module">
+
+import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.5/firebase-app.js";
+import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.12.5/firebase-auth.js";
+
+const firebaseConfig = {
+  apiKey: "AIzaSyAzHv6pERITgxWslvSqn_Qz0mIIVf8XLxc",
+  authDomain: "glaucio-ferrine.firebaseapp.com",
+  projectId: "glaucio-ferrine",
+  storageBucket: "glaucio-ferrine.firebasestorage.app",
+  messagingSenderId: "1047109845257",
+  appId: "1:1047109845257:web:7d8ebe2aa817d0114713d8"
+};
+
+const app = initializeApp(firebaseConfig);
+const auth = getAuth(app);
+
+onAuthStateChanged(auth, (user) => {
+    if (!user) {
+        window.location.href = "login.html";
+    }
+});
+
+</script>
