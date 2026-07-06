@@ -2,25 +2,81 @@
 <html lang="pt-BR">
 <head>
 <meta charset="UTF-8">
-<title>Login</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Dōjō | Glaucio Ferrine</title>
 
 <style>
+
 body{
+    margin:0;
+    font-family:Arial;
     background:#0b0b0b;
     color:white;
-    font-family:Arial;
+}
+
+/* SPLASH (entrada inicial) */
+#splash{
+    position:fixed;
+    top:0;
+    left:0;
+    width:100%;
+    height:100%;
+    background:#000;
     display:flex;
     justify-content:center;
     align-items:center;
+    flex-direction:column;
+    z-index:999;
+    animation:fadeOut 2.5s ease forwards;
+    animation-delay:1.5s;
+}
+
+#splash h1{
+    color:#ff2d2d;
+    font-size:28px;
+    letter-spacing:2px;
+}
+
+#splash p{
+    color:#777;
+    margin-top:10px;
+    font-size:14px;
+}
+
+/* LOGIN */
+.container{
     height:100vh;
+    display:flex;
+    justify-content:center;
+    align-items:center;
 }
 
 .box{
+    width:360px;
     background:#151515;
-    padding:40px;
-    border-radius:12px;
-    width:320px;
+    padding:35px;
+    border-radius:14px;
     border:1px solid #c40000;
+    box-shadow:0 0 30px rgba(196,0,0,0.25);
+    opacity:0;
+    transform:translateY(20px);
+    animation:fadeIn 0.8s ease forwards;
+    animation-delay:2.2s;
+}
+
+.logo{
+    text-align:center;
+    font-size:20px;
+    color:#ff2d2d;
+    font-weight:bold;
+    margin-bottom:5px;
+}
+
+.sub{
+    text-align:center;
+    font-size:13px;
+    color:#aaa;
+    margin-bottom:25px;
 }
 
 input{
@@ -30,6 +86,7 @@ input{
     background:#222;
     border:none;
     color:white;
+    border-radius:6px;
 }
 
 button{
@@ -39,31 +96,63 @@ button{
     border:none;
     color:white;
     cursor:pointer;
+    border-radius:6px;
+    font-weight:bold;
 }
 
 button:hover{
     background:#ff0000;
 }
-</style>
 
+#msg{
+    text-align:center;
+    margin-top:10px;
+    color:#ff4d4d;
+    font-size:13px;
+}
+
+/* animações */
+@keyframes fadeOut{
+    0%{opacity:1;}
+    100%{opacity:0; visibility:hidden;}
+}
+
+@keyframes fadeIn{
+    to{
+        opacity:1;
+        transform:translateY(0);
+    }
+}
+
+</style>
 </head>
 
 <body>
 
+<!-- SPLASH -->
+<div id="splash">
+    <h1>⛩️ Dōjō | Glaucio Ferrine</h1>
+<p>O caminho de volta ao Ser</p>
+
+<!-- LOGIN -->
+<div class="container">
+
 <div class="box">
 
-<h2>Entrar</h2>
+<div class="logo">⛩️ Dōjō | Glaucio Ferrine</div>
+<div class="sub">O caminho de volta ao Ser</div>
 
 <input type="email" id="email" placeholder="E-mail">
 <input type="password" id="senha" placeholder="Senha">
 
-<button onclick="login()">Acessar</button>
+<button onclick="login()">Entrar</button>
 
 <p id="msg"></p>
 
 </div>
 
-<!-- Firebase -->
+</div>
+
 <script type="module">
 
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.5/firebase-app.js";
@@ -90,8 +179,8 @@ signInWithEmailAndPassword(auth, email, senha)
 .then(() => {
     window.location.href = "index.html";
 })
-.catch((error) => {
-    document.getElementById("msg").innerText = "Acesso negado";
+.catch(() => {
+    document.getElementById("msg").innerText = "Acesso inválido";
 });
 
 }
