@@ -160,6 +160,21 @@ button:active{
     pointer-events:none;
 }
 
+/* ESQUECEU A SENHA */
+.forgot{
+    text-align:center;
+    margin-top:14px;
+    font-size:12.5px;
+    color:#aaa;
+    cursor:pointer;
+    transition:0.2s;
+}
+
+.forgot:hover{
+    color:#ff2d2d;
+    text-decoration:underline;
+}
+
 /* MSG */
 #msg{
     text-align:center;
@@ -216,6 +231,8 @@ button:active{
 
 <button id="btn" onclick="login()">Entrar</button>
 
+<p class="forgot" onclick="esqueceuSenha()">Esqueceu a senha?</p>
+
 <p id="msg"></p>
 
 </div>
@@ -239,7 +256,7 @@ setTimeout(() => {
 <script type="module">
 
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.5/firebase-app.js";
-import { getAuth, signInWithEmailAndPassword } from "https://www.gstatic.com/firebasejs/10.12.5/firebase-auth.js";
+import { getAuth, signInWithEmailAndPassword, sendPasswordResetEmail } from "https://www.gstatic.com/firebasejs/10.12.5/firebase-auth.js";
 
 const firebaseConfig = {
   apiKey: "AIzaSyAzHv6pERITgxWslvSqn_Qz0mIIVf8XLxc",
@@ -287,6 +304,36 @@ signInWithEmailAndPassword(auth, email, senha)
     btn.innerText = "Entrar";
     btn.classList.remove("loading");
 
+});
+
+}
+
+window.esqueceuSenha = function(){
+
+const email = document.getElementById("email").value;
+const msg = document.getElementById("msg");
+
+if(!email){
+    msg.style.color = "#ff4d4d";
+    msg.innerText = "Digite seu e-mail no campo acima primeiro";
+    return;
+}
+
+sendPasswordResetEmail(auth, email)
+.then(() => {
+    msg.style.color = "#4dff88";
+    msg.innerText = "E-mail de recuperação enviado! Verifique sua caixa de entrada.";
+})
+.catch((error) => {
+    msg.style.color = "#ff4d4d";
+
+    if(error.code === "auth/invalid-email"){
+        msg.innerText = "E-mail inválido";
+    } else if(error.code === "auth/user-not-found"){
+        msg.innerText = "Nenhuma conta encontrada com esse e-mail";
+    } else {
+        msg.innerText = "Erro ao enviar e-mail de recuperação";
+    }
 });
 
 }
