@@ -5,45 +5,47 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Dōjō | Glaucio Ferrine</title>
 
+<!-- FONT -->
+<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;600;700&display=swap" rel="stylesheet">
+
 <style>
 
 body{
     margin:0;
-    font-family:Arial;
-    background:#0b0b0b;
+    font-family:'Montserrat', sans-serif;
+    background:#000;
     color:white;
 }
 
-/* SPLASH (entrada inicial) */
+/* SPLASH */
 #splash{
     position:fixed;
     top:0;
     left:0;
     width:100%;
     height:100%;
-    background:#000;
+    background:radial-gradient(circle at center, #1a0000, #000 60%);
     display:flex;
     justify-content:center;
     align-items:center;
     flex-direction:column;
     z-index:999;
-    animation:fadeOut 2.5s ease forwards;
-    animation-delay:1.5s;
+    transition:opacity 1s ease;
 }
 
 #splash h1{
+    font-size:30px;
     color:#ff2d2d;
-    font-size:28px;
-    letter-spacing:2px;
+    text-shadow:0 0 20px #ff0000;
 }
 
 #splash p{
-    color:#777;
+    color:#888;
     margin-top:10px;
     font-size:14px;
 }
 
-/* LOGIN */
+/* LOGIN CONTAINER */
 .container{
     height:100vh;
     display:flex;
@@ -51,24 +53,29 @@ body{
     align-items:center;
 }
 
+/* BOX */
 .box{
     width:360px;
-    background:#151515;
+    background:rgba(20,20,20,0.95);
     padding:35px;
     border-radius:14px;
     border:1px solid #c40000;
-    box-shadow:0 0 30px rgba(196,0,0,0.25);
+    box-shadow:0 0 40px rgba(255,0,0,0.15);
     opacity:0;
-    transform:translateY(20px);
-    animation:fadeIn 0.8s ease forwards;
-    animation-delay:2.2s;
+    transform:translateY(30px);
+    transition:all 1s ease;
+}
+
+.box.show{
+    opacity:1;
+    transform:translateY(0);
 }
 
 .logo{
     text-align:center;
     font-size:20px;
     color:#ff2d2d;
-    font-weight:bold;
+    font-weight:600;
     margin-bottom:5px;
 }
 
@@ -79,6 +86,7 @@ body{
     margin-bottom:25px;
 }
 
+/* INPUTS */
 input{
     width:100%;
     padding:12px;
@@ -87,8 +95,42 @@ input{
     border:none;
     color:white;
     border-radius:6px;
+    transition:0.2s;
 }
 
+input:focus{
+    outline:none;
+    border:1px solid #ff2d2d;
+    box-shadow:0 0 10px rgba(255,45,45,0.3);
+}
+
+/* SENHA WRAPPER */
+.input-wrapper{
+    position:relative;
+}
+
+.input-wrapper input{
+    padding-right:42px;
+}
+
+/* OLHO */
+.eye{
+    position:absolute;
+    right:12px;
+    top:50%;
+    transform:translateY(-50%);
+    width:18px;
+    height:18px;
+    cursor:pointer;
+    color:#aaa;
+}
+
+.eye svg{
+    width:100%;
+    height:100%;
+}
+
+/* BOTÃO */
 button{
     width:100%;
     padding:12px;
@@ -97,13 +139,24 @@ button{
     color:white;
     cursor:pointer;
     border-radius:6px;
-    font-weight:bold;
+    font-weight:600;
+    transition:0.2s;
 }
 
 button:hover{
     background:#ff0000;
 }
 
+button:active{
+    transform:scale(0.98);
+}
+
+.loading{
+    opacity:0.7;
+    pointer-events:none;
+}
+
+/* MSG */
 #msg{
     text-align:center;
     margin-top:10px;
@@ -111,17 +164,17 @@ button:hover{
     font-size:13px;
 }
 
-/* animações */
-@keyframes fadeOut{
-    0%{opacity:1;}
-    100%{opacity:0; visibility:hidden;}
+/* SHAKE */
+@keyframes shake{
+    0%{transform:translateX(0);}
+    25%{transform:translateX(-5px);}
+    50%{transform:translateX(5px);}
+    75%{transform:translateX(-5px);}
+    100%{transform:translateX(0);}
 }
 
-@keyframes fadeIn{
-    to{
-        opacity:1;
-        transform:translateY(0);
-    }
+.shake{
+    animation:shake 0.3s;
 }
 
 </style>
@@ -132,20 +185,32 @@ button:hover{
 <!-- SPLASH -->
 <div id="splash">
     <h1>⛩️ Dōjō | Glaucio Ferrine</h1>
-<p>O caminho de volta ao Ser</p>
+    <p>O caminho de volta ao Ser</p>
+</div>
 
 <!-- LOGIN -->
 <div class="container">
 
-<div class="box">
+<div class="box" id="box">
 
 <div class="logo">⛩️ Dōjō | Glaucio Ferrine</div>
 <div class="sub">O caminho de volta ao Ser</div>
 
 <input type="email" id="email" placeholder="E-mail">
-<input type="password" id="senha" placeholder="Senha">
 
-<button onclick="login()">Entrar</button>
+<div class="input-wrapper">
+    <input type="password" id="senha" placeholder="Senha">
+
+    <div class="eye" onclick="toggleSenha()" id="eye">
+        <svg viewBox="0 0 24 24" fill="none">
+            <path d="M1 12C2.73 7.11 7.28 4 12 4s9.27 3.11 11 8c-1.73 4.89-6.28 8-11 8S2.73 16.89 1 12z"
+                  stroke="currentColor" stroke-width="2"/>
+            <circle cx="12" cy="12" r="3" stroke="currentColor" stroke-width="2"/>
+        </svg>
+    </div>
+</div>
+
+<button id="btn" onclick="login()">Entrar</button>
 
 <p id="msg"></p>
 
@@ -153,6 +218,20 @@ button:hover{
 
 </div>
 
+<!-- SPLASH SCRIPT -->
+<script>
+setTimeout(() => {
+    document.getElementById("splash").style.opacity = "0";
+
+    setTimeout(() => {
+        document.getElementById("splash").style.display = "none";
+        document.getElementById("box").classList.add("show");
+    }, 1000);
+
+}, 1500);
+</script>
+
+<!-- FIREBASE -->
 <script type="module">
 
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.5/firebase-app.js";
@@ -172,18 +251,60 @@ const auth = getAuth(app);
 
 window.login = function(){
 
+const btn = document.getElementById("btn");
+const box = document.getElementById("box");
+
 const email = document.getElementById("email").value;
 const senha = document.getElementById("senha").value;
 
+btn.innerText = "Entrando...";
+btn.classList.add("loading");
+
 signInWithEmailAndPassword(auth, email, senha)
 .then(() => {
-    window.location.href = "index.html";
+
+    btn.innerText = "Sucesso";
+
+    setTimeout(() => {
+        window.location.href = "index.html";
+    }, 500);
+
 })
 .catch(() => {
+
     document.getElementById("msg").innerText = "Acesso inválido";
+
+    box.classList.add("shake");
+
+    setTimeout(() => {
+        box.classList.remove("shake");
+    }, 300);
+
+    btn.innerText = "Entrar";
+    btn.classList.remove("loading");
+
 });
 
 }
+
+function toggleSenha(){
+    const input = document.getElementById("senha");
+    const eye = document.getElementById("eye");
+
+    const isHidden = input.type === "password";
+
+    input.type = isHidden ? "text" : "password";
+
+    eye.innerHTML = isHidden
+    ? `<svg viewBox="0 0 24 24" fill="none"><path d="M17.94 17.94C16.16 19.24 14.15 20 12 20C7.28 20 2.73 16.89 1 12C2.73 7.11 7.28 4 12 4s9.27 3.11 11 8c-.6 1.7-1.5 3.23-2.62 4.5" stroke="currentColor" stroke-width="2"/></svg>`
+    : `<svg viewBox="0 0 24 24" fill="none"><path d="M1 12C2.73 7.11 7.28 4 12 4s9.27 3.11 11 8c-1.73 4.89-6.28 8-11 8S2.73 16.89 1 12z" stroke="currentColor" stroke-width="2"/><circle cx="12" cy="12" r="3" stroke="currentColor" stroke-width="2"/></svg>`;
+}
+
+document.addEventListener("keydown", function(e){
+    if(e.key === "Enter"){
+        login();
+    }
+});
 
 </script>
 
